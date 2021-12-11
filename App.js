@@ -93,7 +93,7 @@ const App = () => {
       <Stack.Navigator initialRouteName={"Home"} screenOptions={{title: 'Common Overview'}}>
         <Stack.Screen name="Home" component={HomeScreen} options={{title: 'Overview'}}/>
         {/*<Stack.Screen name="Details" component={DetailsScreen} initialParams={{otherParam: 'initial Param'}}/>*/}
-        <Stack.Screen name="CreatePost" component={CreatePostScreen} initialParams={{otherParam: 'initial Param'}}/>
+        <Stack.Screen name="CreatePost" component={CreatePostScreen}/>
       </Stack.Navigator>
     </NavigationContainer>
   );
