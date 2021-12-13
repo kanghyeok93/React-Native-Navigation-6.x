@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Button, Text, TextInput, View} from 'react-native';
+import {Button, Image, Text, TextInput, View} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 
@@ -18,20 +18,23 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 const HomeScreen = ({navigation, route}) => {
   useEffect(() => {
     if (route.params?.post) {
-
     }
-  }, [route.params?.post])
+  }, [route.params?.post]);
 
   return (
     <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
       <Button
         title={'Create post'}
-        onPress={() => navigation.navigate('CreatePost')}
+        onPress={() =>
+          navigation.navigate('CreatePost', {
+            name: 'Custom post header',
+          })
+        }
       />
       <Text style={{margin: 10}}>Post: {route.params?.post}</Text>
     </View>
-  )
-}
+  );
+};
 
 const CreatePostScreen = ({navigation, route}) => {
   const [postText, setPostText] = useState('');
@@ -51,13 +54,17 @@ const CreatePostScreen = ({navigation, route}) => {
           navigation.navigate({
             name: 'Home',
             params: {post: postText},
-            marge: true
-          })
+            marge: true,
+          });
         }}
       />
+      <Button
+        title={'Update the title'}
+        onPress={() => navigation.setOptions({title: 'Updated !!!'})}
+      />
     </>
-  )
-}
+  );
+};
 
 const DetailsScreen = ({route, navigation}) => {
   const {itemId, otherParam} = route.params;
@@ -68,18 +75,31 @@ const DetailsScreen = ({route, navigation}) => {
       <Text>otherParam: {JSON.stringify(otherParam)}</Text>
       <Button
         title="Go to Details... again"
-        onPress={() => navigation.push('Details', {
-          itemId: Math.floor(Math.random() * 100),
-        })}
+        onPress={() =>
+          navigation.push('Details', {
+            itemId: Math.floor(Math.random() * 100),
+          })
+        }
       />
-      <Button title="Go to Home" onPress={() => navigation.navigate('Home')}/>
-      <Button title="Go back" onPress={() => navigation.goBack()}/>
+      <Button title="Go to Home" onPress={() => navigation.navigate('Home')} />
+      <Button title="Go back" onPress={() => navigation.goBack()} />
       <Button
         title="Go back to first screen in stack"
         onPress={() => navigation.popToTop()}
       />
     </View>
-  )
+  );
+};
+
+function LogoTitle() {
+  return (
+    <Image
+      style={{width: 50, height: 50}}
+      source={{
+        uri: 'https://i.picsum.photos/id/1005/5760/3840.jpg?hmac=2acSJCOwz9q_dKtDZdSB-OIK1HUcwBeXco_RMMTUgfY',
+      }}
+    />
+  );
 }
 
 const Stack = createNativeStackNavigator();
@@ -90,10 +110,29 @@ const Stack = createNativeStackNavigator();
 const App = () => {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName={"Home"} screenOptions={{title: 'Common Overview'}}>
-        <Stack.Screen name="Home" component={HomeScreen} options={{title: 'Overview'}}/>
+      <Stack.Navigator
+        initialRouteName={'Home'}
+        screenOptions={{
+          title: 'Common Overview',
+          headerStyle: {
+            backgroundColor: '#f4511e',
+          },
+          headerTintColor: '#fff',
+          headerTitleColor: {
+            fontWeight: 'bold',
+          },
+        }}>
+        <Stack.Screen
+          name="Home"
+          component={HomeScreen}
+          options={{headerTitle: props => <LogoTitle {...props} />}}
+        />
         {/*<Stack.Screen name="Details" component={DetailsScreen} initialParams={{otherParam: 'initial Param'}}/>*/}
-        <Stack.Screen name="CreatePost" component={CreatePostScreen}/>
+        <Stack.Screen
+          name="CreatePost"
+          component={CreatePostScreen}
+          options={({route}) => ({title: route.params.name})}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );
