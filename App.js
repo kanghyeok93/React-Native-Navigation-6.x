@@ -1,7 +1,9 @@
-import React, {useEffect, useLayoutEffect, useState} from 'react';
+import React, {useLayoutEffect, useState} from 'react';
 import {Button, Image, Text, TextInput, View} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
+
+// React Navigation > Fundamentals > Getting started ~ Header buttons (Sample Example)
 
 // const HomeScreen = ({navigation}) => {
 //   return (
