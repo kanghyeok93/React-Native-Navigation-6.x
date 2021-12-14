@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useLayoutEffect, useState} from 'react';
 import {Button, Image, Text, TextInput, View} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
@@ -15,25 +15,39 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 //   )
 // }
 
-const HomeScreen = ({navigation, route}) => {
-  useEffect(() => {
-    if (route.params?.post) {
-    }
-  }, [route.params?.post]);
+// const HomeScreen = ({navigation, route}) => {
+//   useEffect(() => {
+//     if (route.params?.post) {
+//     }
+//   }, [route.params?.post]);
+//
+//   return (
+//     <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+//       <Button
+//         title={'Create post'}
+//         onPress={() =>
+//           navigation.navigate('CreatePost', {
+//             name: 'Custom post header',
+//           })
+//         }
+//       />
+//       <Text style={{margin: 10}}>Post: {route.params?.post}</Text>
+//     </View>
+//   );
+// };
 
-  return (
-    <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-      <Button
-        title={'Create post'}
-        onPress={() =>
-          navigation.navigate('CreatePost', {
-            name: 'Custom post header',
-          })
-        }
-      />
-      <Text style={{margin: 10}}>Post: {route.params?.post}</Text>
-    </View>
-  );
+const HomeScreen = ({navigation}) => {
+  const [count, setCount] = useState(0);
+
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <Button onPress={() => setCount(c => c + 1)} title="Update count" />
+      ),
+    });
+  }, [navigation]);
+
+  return <Text>Count: {count}</Text>;
 };
 
 const CreatePostScreen = ({navigation, route}) => {
@@ -125,7 +139,9 @@ const App = () => {
         <Stack.Screen
           name="Home"
           component={HomeScreen}
-          options={{headerTitle: props => <LogoTitle {...props} />}}
+          options={{
+            headerTitle: props => <LogoTitle {...props} />,
+          }}
         />
         {/*<Stack.Screen name="Details" component={DetailsScreen} initialParams={{otherParam: 'initial Param'}}/>*/}
         <Stack.Screen
