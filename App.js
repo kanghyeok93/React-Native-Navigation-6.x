@@ -1,21 +1,38 @@
 import React, {useLayoutEffect, useState} from 'react';
 import {Button, Image, Text, TextInput, View} from 'react-native';
-import {NavigationContainer} from '@react-navigation/native';
+import {NavigationContainer, useFocusEffect} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 
 // React Navigation > Fundamentals > Getting started ~ Header buttons (Sample Example)
 
-// const HomeScreen = ({navigation}) => {
-//   return (
-//     <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-//       <Text>Home Screen</Text>
-//       <Button title="Go to Details" onPress={() => navigation.navigate('Details', {
-//         itemId: 86,
-//         otherParam: 'anything you want here',
-//       })}/>
-//     </View>
-//   )
-// }
+const HomeScreen = ({navigation}) => {
+  useFocusEffect(
+    React.useCallback(() => {
+      // Do something when the screen is focused
+      console.log('focused');
+      return () => {
+        // Do something when the screen is unfocused
+        // Useful for cleanup functions
+        console.log('unfocused');
+      };
+    }, []),
+  );
+
+  return (
+    <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+      <Text>Home Screen</Text>
+      <Button
+        title="Go to Details"
+        onPress={() =>
+          navigation.navigate('Details', {
+            itemId: 86,
+            otherParam: 'anything you want here',
+          })
+        }
+      />
+    </View>
+  );
+};
 
 // const HomeScreen = ({navigation, route}) => {
 //   useEffect(() => {
@@ -38,19 +55,19 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 //   );
 // };
 
-const HomeScreen = ({navigation}) => {
-  const [count, setCount] = useState(0);
-
-  useLayoutEffect(() => {
-    navigation.setOptions({
-      headerRight: () => (
-        <Button onPress={() => setCount(c => c + 1)} title="Update count" />
-      ),
-    });
-  }, [navigation]);
-
-  return <Text>Count: {count}</Text>;
-};
+// const HomeScreen = ({navigation}) => {
+//   const [count, setCount] = useState(0);
+//
+//   useLayoutEffect(() => {
+//     navigation.setOptions({
+//       headerRight: () => (
+//         <Button onPress={() => setCount(c => c + 1)} title="Update count" />
+//       ),
+//     });
+//   }, [navigation]);
+//
+//   return <Text>Count: {count}</Text>;
+// };
 
 const CreatePostScreen = ({navigation, route}) => {
   const [postText, setPostText] = useState('');
@@ -145,12 +162,16 @@ const App = () => {
             headerTitle: props => <LogoTitle {...props} />,
           }}
         />
-        {/*<Stack.Screen name="Details" component={DetailsScreen} initialParams={{otherParam: 'initial Param'}}/>*/}
         <Stack.Screen
-          name="CreatePost"
-          component={CreatePostScreen}
-          options={({route}) => ({title: route.params.name})}
+          name="Details"
+          component={DetailsScreen}
+          initialParams={{otherParam: 'initial Param'}}
         />
+        {/*<Stack.Screen*/}
+        {/*  name="CreatePost"*/}
+        {/*  component={CreatePostScreen}*/}
+        {/*  options={({route}) => ({title: route.params.name})}*/}
+        {/*/>*/}
       </Stack.Navigator>
     </NavigationContainer>
   );
